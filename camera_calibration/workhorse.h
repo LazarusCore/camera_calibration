@@ -13,8 +13,8 @@ public:
 	void write(FileStorage& fs) const                        //Write serialization for this class
 	{
 		fs << "{" 
-			<< "Corners_Horizontal" << corners.horizontal
-			<< "Corners_Vertical" << corners.vertical
+			<< "Corners_Horizontal" << corners.width
+			<< "Corners_Vertical" << corners.height
 			<< "Square_Size" << squareSize
 
 			<< "Export_DetectedPoints" << bwritePoints
@@ -35,8 +35,8 @@ public:
 	}
 	void read(const FileNode& node)                          //Read serialization for this class
 	{
-		node["Corners_Horizontal"] >> corners.horizontal;
-		node["Corners_Vertical"] >> corners.vertical;
+		node["Corners_Horizontal"] >> corners.width;
+		node["Corners_Vertical"] >> corners.height;
 		node["Square_Size"] >> squareSize;
 
 		node["Export_DetectedPoints"] >> bwritePoints;
@@ -71,15 +71,12 @@ public:
 			importCap >> temp;
 			temp.copyTo(result);
 		}
-		else if (atImageList < (int)imageList.size())
-			//Check if our location in the imagelist is at the end, if it is we can load the image, and return it (this was used to check this vs an image list)
-			result = imread(imageList[atImageList++], CV_LOAD_IMAGE_COLOR);
 
 		return result;
 	}
 
 public:
-	Size corners;					// The size of the board -> corners.vertical by corners.horizontal
+	Size corners;					// The size of the board -> corners.width by corners.height
 	float squareSize;				// The size of a square in your defined unit (point, millimeter,etc).
 	int nrFrames;					// The number of frames to use from the input for calibration
 	float aspectRatio;				// The aspect ratio
